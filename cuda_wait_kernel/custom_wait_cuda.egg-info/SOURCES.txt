@@ -1,7 +1,0 @@
-custom_wait_cuda.cpp
-custom_wait_cuda_kernel.cu
-setup.py
-custom_wait_cuda.egg-info/PKG-INFO
-custom_wait_cuda.egg-info/SOURCES.txt
-custom_wait_cuda.egg-info/dependency_links.txt
-custom_wait_cuda.egg-info/top_level.txt
