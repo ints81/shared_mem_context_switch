@@ -29,7 +29,7 @@ def rebuild_tensor_from_ipc_info(ipc_info):
     )
 
     rebuilded_tensor = torch._utils._rebuild_tensor(
-        torch.storage._TypedStorage(wrap_storage=storage._untyped(), dtype=tensor_dtype),
+        torch.storage.TypedStorage(wrap_storage=storage.untyped(), dtype=tensor_dtype),
         tensor_offset, tensor_size, tensor_stride
     )
 
