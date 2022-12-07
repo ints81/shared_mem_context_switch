@@ -32,19 +32,17 @@ class Lenet(nn.Module):
     def train(self):
         self.training = True
 
-        register_msg = f'register/123.0.0.1/cuda:{torch.cuda.current_device()}'
+        register_msg = f'register/cuda:{torch.cuda.current_device()}'
         self.sock.send(register_msg.encode('utf-8'))
-        # comm done
-        self.sock.recv(4096).decode('utf-8')
+        self.sock.recv(4096)
 
-        get_flag_msg = f'get_flag/123.0.0.1'
+        get_flag_msg = f'get_flag'
         self.sock.send(get_flag_msg.encode('utf-8'))
         recv_msg_len = self.sock.recv(4)
         flag_ipc_info_msg = self.sock.recv(int.from_bytes(recv_msg_len, byteorder="little"))
         flag_ipc_info = pickle.loads(flag_ipc_info_msg)
         self.shared_flag = rebuild_tensor_from_ipc_info(flag_ipc_info)
-        # comm done
-        self.sock.recv(4096).decode('utf-8')
+        self.sock.recv(4096)
 
     def set_flag(self):
         self.shared_flag += 1
@@ -104,10 +102,10 @@ def main():
     loss_func = nn.CrossEntropyLoss()
     optimizer = optim.SGD(model.parameters(), lr=0.1)
 
-    warmup_iters = 3
+    warmup_iters = 50
     train_iter(model, loss_func, optimizer, dummy_x, dummy_y, warmup_iters)
 
-    client_socket.send('exit/123.0.0.1'.encode('utf-8'))
+    client_socket.send('exit'.encode('utf-8'))
     client_socket.close()
 
 

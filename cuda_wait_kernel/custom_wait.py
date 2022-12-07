@@ -7,11 +7,11 @@ import custom_wait_cuda
 class WaitCudaFunction(torch.autograd.Function):
     @staticmethod
     def forward(ctx, wait_flag):
-        wait_cuda.forward(wait_flag)
+        custom_wait_cuda.forward(wait_flag)
 
     @staticmethod
     def backward(ctx, wait_flag):
-        wait_cuda.backward(wait_flag)
+        custom_wait_cuda.backward(wait_flag)
 
 
 class WaitCuda(nn.Module):

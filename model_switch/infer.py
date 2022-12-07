@@ -36,14 +36,15 @@ class Lenet(nn.Module):
 
         register_msg = f'register/124.0.0.1/cuda:{torch.cuda.current_device()}'
         self.sock.send(register_msg.encode('utf-8'))
+        self.sock.recv(4096)
 
         get_flag_msg = f'get_flag/124.0.0.1'
         self.sock.send(get_flag_msg.encode('utf-8'))
-
         recv_msg_len = self.sock.recv(4)
         flag_ipc_info_msg = self.sock.recv(int.from_bytes(recv_msg_len, byteorder="little"))
         flag_ipc_info = pickle.loads(flag_ipc_info_msg)
         self.shared_flag = rebuild_tensor_from_ipc_info(flag_ipc_info)
+        self.sock.recv(4096)
 
     def forward(self, x):
         x = self.conv1(x)
@@ -77,6 +78,8 @@ def eval(model, x_data):
 
     y = model(x_data)
 
+    print("Inference done...")
+
     return y
 
 
@@ -94,6 +97,7 @@ def main():
 
     eval(model, dummy_x)
 
+    client_socket.send('exit/124.0.0.1'.encode('utf-8'))
     client_socket.close()
 
 
