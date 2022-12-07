@@ -54,7 +54,6 @@ class Lenet(nn.Module):
 
     def set_flag(self):
         self.shared_flag.fill_(1)
-        LOG.info(f'self.shared_flag: {self.shared_flag}')
 
     def forward(self, x):
         x = self.conv1(x)
@@ -93,7 +92,7 @@ def train_iter(model, loss_func, optimizer, x_data, y_data, num_iters):
         loss.backward()
         optimizer.step()
 
-        print(f"Iter {i} done...")
+        LOG.info(f'Train iter: {i} done...')
 
 
 def main():

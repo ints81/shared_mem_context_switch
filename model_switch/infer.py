@@ -5,9 +5,17 @@ import torchvision
 
 import socket
 import pickle
+import logging
 
 import custom_wait
 from ipc_utils import rebuild_tensor_from_ipc_info
+
+logging.basicConfig(
+    format='%(asctime)s: %(message)s',
+    datefmt='%m/%d/%Y %I:%M:%S %p',
+)
+LOG = logging.getLogger(__name__)
+LOG.setLevel(logging.INFO)
 
 
 class Lenet(nn.Module):
@@ -78,7 +86,7 @@ def eval(model, x_data):
 
     y = model(x_data)
 
-    print("Inference done...")
+    LOG.info("Inference done...")
 
     return y
 
