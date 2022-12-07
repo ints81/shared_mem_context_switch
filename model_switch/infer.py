@@ -34,11 +34,11 @@ class Lenet(nn.Module):
     def eval(self):
         self.training = False
 
-        register_msg = f'register/124.0.0.1/cuda:{torch.cuda.current_device()}'
+        register_msg = f'register/cuda:{torch.cuda.current_device()}'
         self.sock.send(register_msg.encode('utf-8'))
         self.sock.recv(4096)
 
-        get_flag_msg = f'get_flag/124.0.0.1'
+        get_flag_msg = f'get_flag'
         self.sock.send(get_flag_msg.encode('utf-8'))
         recv_msg_len = self.sock.recv(4)
         flag_ipc_info_msg = self.sock.recv(int.from_bytes(recv_msg_len, byteorder="little"))
@@ -97,7 +97,7 @@ def main():
 
     eval(model, dummy_x)
 
-    client_socket.send('exit/124.0.0.1'.encode('utf-8'))
+    client_socket.send('exit'.encode('utf-8'))
     client_socket.close()
 
 

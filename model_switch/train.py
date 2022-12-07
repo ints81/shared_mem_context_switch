@@ -5,8 +5,16 @@ import torchvision
 
 import socket
 import pickle
+import logging
 
 from ipc_utils import rebuild_tensor_from_ipc_info
+
+logging.basicConfig(
+    format='%(asctime)s: %(message)s',
+    datefmt='%m/%d/%Y %I:%M:%S %p',
+)
+LOG = logging.getLogger(__name__)
+LOG.setLevel(logging.INFO)
 
 
 class Lenet(nn.Module):
@@ -45,7 +53,8 @@ class Lenet(nn.Module):
         self.sock.recv(4096)
 
     def set_flag(self):
-        self.shared_flag += 1
+        self.shared_flag.fill_(1)
+        LOG.info(f'self.shared_flag: {self.shared_flag}')
 
     def forward(self, x):
         x = self.conv1(x)
